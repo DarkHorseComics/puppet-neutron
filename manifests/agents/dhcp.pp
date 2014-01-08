@@ -57,11 +57,8 @@ class quantum::agents::dhcp (
 
   case $dhcp_driver {
     /\.Dnsmasq/: {
-      Package['dnsmasq'] -> Package<| title == 'quantum-dhcp-agent' |>
-      package { 'dnsmasq':
-        ensure => present,
-        name   => $::quantum::params::dnsmasq_packages,
-      }
+      Package[$::quantum::params::dnsmasq_packages] -> Package<| title == 'quantum-dhcp-agent' |>
+      ensure_packages($::quantum::params::dnsmasq_packages)
     }
     default: {
       fail("Unsupported dhcp_driver ${dhcp_driver}")
